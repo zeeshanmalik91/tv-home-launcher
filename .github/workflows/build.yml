@@ -12,13 +12,14 @@ jobs:
       - uses: android-actions/setup-android@v3
       - name: Setup Toolchain & Build
         run: |
+          sudo apt-get update && sudo apt-get install -y zsh zip
           sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
-          mkdir -p .toolchain
-          ln -s $ANDROID_HOME/* .toolchain/
-          ln -s $JAVA_HOME .toolchain/jdk
+          mkdir -p .toolchain/jdk-17/Contents
+          ln -s $ANDROID_HOME .toolchain/sdk
+          ln -s $JAVA_HOME .toolchain/jdk-17/Contents/Home
           chmod +x build.sh
           ./build.sh
       - uses: actions/upload-artifact@v4
         with:
           name: tv-home-apk
-          path: "**/*.apk"
+          path: build/tvhome.apk
